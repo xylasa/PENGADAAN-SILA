@@ -1,0 +1,34 @@
+{% extends 'layouts/master_subBag.html' %} {% block content %}
+<style>
+    .heading-info {
+        color: black;
+        font-weight: 700;
+    }
+</style>
+<section class="m-5">
+    <div class="mb-5">
+        <h1 class="heading-info text-center">KEPALA SUB BAGIAN</h1>
+    </div>
+    <div
+        class="card d-flex flex-column justify-content-center align-items-center p-5"
+    >
+        <h3 class="heading-info text-center">
+            SELAMAT DATANG DI SISTEM INFORMASI PENGADAAN BARANG DI RSUD
+            dr.DARSONO PACITAN
+        </h3>
+        <img
+            src="/static/assets/img/backgrounds/dashboard.png"
+            alt=""
+            style="max-width: 550px; width: 100%; object-fit: cover"
+        />
+        <h4 class="heading-info text-center">
+            Lihat Verifikasi Barang Dengan Cepat dan Mudah
+        </h4>
+        <a href="http://127.0.0.1:5000/sub_bag/verif">
+            <button class="btn text-white" style="background-color: #9cbee4">
+                Lihat Verifikasi Barang Sekarang!
+            </button>
+        </a>
+    </div>
+</section>
+{% endblock %}

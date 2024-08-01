@@ -1,0 +1,7 @@
+flask
+requests
+bcrypt
+Flask-Bcrypt
+Flask-PyMongo
+pymongo
+python-dotenv

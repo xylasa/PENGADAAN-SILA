@@ -1,0 +1,135 @@
+{% extends 'layouts/master_subBag.html' %} {% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="col-xl-12">
+    <!-- HTML5 Inputs -->
+    <div class="card-header">
+      <h2 class="text-uppercase">Detail Verifikasi Pengusulan Barang</h2>
+    </div>
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="mb-3 row">
+          <label for="ruang-input" class="col-md-2 col-form-label">Ruang</label>
+          <div class="col-md-10">
+            <input
+              class="form-control"
+              type="text"
+              id="ruang-input"
+              value="{{ item_detail.ruangan }}"
+              readonly
+            />
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="tanggal-pengajuan-input" class="col-md-2 col-form-label"
+            >Tanggal Pengajuan</label
+          >
+          <div class="col-md-10">
+            <input
+              class="form-control"
+              type="text"
+              id="tanggal-pengajuan-input"
+              value="{{ item_detail.tanggal_pengusulan }}"
+              readonly
+            />
+          </div>
+        </div>
+        <!-- <div class="mb-3 row">
+                    <label
+                        for="tanggal-penerimaan-input"
+                        class="col-md-2 col-form-label"
+                        >Tanggal Penerimaan</label
+                    >
+                    <div class="col-md-10">
+                        <input
+                            class="form-control"
+                            type="date"
+                            id="tanggal-penerimaan-input"
+                        />
+                    </div>
+                </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12 card">
+      <div class="card-body table-responsive text-nowrap">
+        <table class="table" style="width: 100%">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Barang</th>
+              <th>Volume</th>
+              <th>Type/Merk</th>
+              <th>Status</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            <tr>
+              <td>1</td>
+              <td>{{ item_detail.nama_barang }}</td>
+              <td>{{ item_detail.volume }}</td>
+              <td>{{ item_detail.merek }}</td>
+              <td>
+                {% if item_detail.status == "Decline" %}Ditolak {% elif item_detail.status == "Success" %}Dterima{% else %}
+                <button
+                  type="button"
+                  class="btn btn-danger rounded-pill"
+                  data-bs-toggle="modal"
+                  data-bs-target="#rejectModal"
+                  data-id="{{ item_detail._id }}"
+                >
+                  ✖️
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-success rounded-pill"
+                  data-bs-toggle="modal"
+                  data-bs-target="#accModal"
+                  data-id="{{ item_detail._id }}"
+                >
+                  ✔️
+                </button>
+                {% endif %}
+              </td>
+              <td>
+                {% if item_detail.status == "Decline" %} {{ item_detail.alasan
+                }} {% else %} {% if item_detail.status == "Success" %} Diterima ({{
+                item_detail.jumlah_diterima }}) {% else %} Belum Diverifikasi {%
+                endif %} {% endif %}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to handle button clicks
+  document.addEventListener("DOMContentLoaded", function () {
+    // Select the buttons
+    const accButton = document.querySelector('[data-bs-target="#accModal"]');
+    const rejectButton = document.querySelector(
+      '[data-bs-target="#rejectModal"]'
+    );
+
+    // Add click event listener to each button
+    accButton.addEventListener("click", function () {
+      const tanggalPenerimaan = document.getElementById(
+        "tanggal-penerimaan-input"
+      ).value;
+      accButton.setAttribute("data-date", tanggalPenerimaan);
+    });
+
+    rejectButton.addEventListener("click", function () {
+      const tanggalPenerimaan = document.getElementById(
+        "tanggal-penerimaan-input"
+      ).value;
+      rejectButton.setAttribute("data-date", tanggalPenerimaan);
+    });
+  });
+</script>
+
+{% endblock %}

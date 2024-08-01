@@ -1,0 +1,93 @@
+{% extends 'layouts/master_kepalaBidang.html' %}
+
+{% block title %}
+Laporan Persediaan -
+{% endblock %}
+
+{% block content %}
+
+<section class="m-5">
+    <div class="card d-flex flex-column p-5">
+        <div class="details">
+            <div class="recentOrders">
+                <div class="cardHeader">
+                    <h1 style="color: #9cbee4;">REPORT PENGAJUAN & PENGUSULAN</h1>
+                </div>
+
+                <h3 style="margin-top: 20px;">Filter Report</h3>
+
+                <form action="" method="GET" class="row">
+                    <div class="col-10">
+                        <div class="form-inline">
+                            <label for="bulan" style="margin-right: 10px; color: #000; font-weight: bold;">Filter
+                                Bulan:</label>
+                            <input type="month" id="bulan" class="form-control" aria-label="Filter Bulan" style="
+                border-radius: 10px;
+                padding: 8px;
+                border: 1px solid black;
+            " name="bulan" value="{% if param_bulan is not none and param_bulan != '' %}{{ param_bulan }}{% endif %}" />
+
+                        </div>
+                    </div>
+
+                    <div class="col-2">
+                        <label for="bulan" style="margin-right: 10px; visibility: hidden;">Filter Bulan:</label>
+                        <button class="btn"
+                            style="padding: 8px 20px; background: #272c52; color: white; border-radius: 6px; margin-left: 10px;">Submit</button>
+                    </div>
+                </form>
+
+                <!-- <div class="top-buttons" style="margin-top: 30px; display: inline;">
+                    <form action="/laporan-barang-keluar/export/pdf" method="GET" style="float: left;">
+                        <input type="hidden" name="bulan"
+                            value="{% if param_bulan is not none and param_bulan != '' %}{{ param_bulan }}{% endif %}">
+                        <button class="btn" style="background: #82E769; color: white; margin-right: 20px;"
+                            type="submit">
+                            <ion-icon name="document-text-outline"></ion-icon> PDF
+                        </button>
+                    </form>
+                    <form action="/laporan-barang-keluar/export/xsl" method="GET" style="float: left;">
+                        <input type="hidden" name="bulan"
+                            value="{% if param_bulan is not none and param_bulan != '' %}{{ param_bulan }}{% endif %}">
+                        <button class="btn" style="margin-right: 10px; background: #EBCC7B; color: white;">
+                            <ion-icon name="document-text-outline"></ion-icon> Excel
+                        </button>
+                    </form>
+                </div> -->
+
+                {% if param_bulan is not none and param_bulan != '' %}
+                <h3 class="mt-5">Report Pengajuan & Pengusulan Periode {{ indonesian_date }}</h3>
+                {% else %}
+                <h3>Report Pengajuan & Pengusulan Barang</h3>
+                {% endif %}
+                <hr />
+
+                <div class="table-responsive mt-3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ruangan</th>
+                                <th>Total Pengajuan</th>
+                                <th>Total Pengusulan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in transactions %}
+                            <tr>
+                                <td>{{ item.ruangan }}</td>
+                                <td>{{ item.total_pengajuan }}</td>
+                                <td>{{ item.total_pengusulan }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

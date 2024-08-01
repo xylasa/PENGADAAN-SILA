@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html
+    lang="en"
+    class="light-style layout-menu-fixed"
+    dir="ltr"
+    data-theme="theme-default"
+    data-template="vertical-menu-template-free"
+>
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+        />
+
+        <title>RSUD DR. DARSONO</title>
+
+        <meta name="description" content="" />
+
+        <!-- Favicon -->
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="/static/assets/logo rs.png"
+        />
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+        />
+
+        <link
+            rel="stylesheet"
+            href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css"
+        />
+
+        <!-- Icons. Uncomment required icon fonts -->
+        <link
+            rel="stylesheet"
+            href="/static/assets/vendor/fonts/boxicons.css"
+        />
+
+        <!-- Core CSS -->
+        <link
+            rel="stylesheet"
+            href="/static/assets/vendor/css/core.css"
+            class="template-customizer-core-css"
+        />
+        <link
+            rel="stylesheet"
+            href="/static/assets/vendor/css/theme-default.css"
+            class="template-customizer-theme-css"
+        />
+        <link rel="stylesheet" href="/static/assets/css/demo.css" />
+
+        <!-- Vendors CSS -->
+        <link
+            rel="stylesheet"
+            href="/static/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css"
+        />
+        <link
+            rel="stylesheet"
+            href="/static/assets/vendor/libs/apex-charts/apex-charts.css"
+        />
+        <style>
+            .menu-item:not(.actives) .menu-link:hover {
+                background-color: transparent !important;
+            }
+            .menu-item.actives .menu-link {
+                background-color: white;
+                color: #9cbee4;
+                margin-left: 1rem;
+                margin-right: 0rem !important;
+                border-top-left-radius: 0.375rem !important;
+                border-bottom-left-radius: 0.375rem !important;
+                border-top-right-radius: 0rem !important;
+                border-bottom-right-radius: 0rem !important;
+            }
+
+            .menu-item.actives .menu-link::after {
+                content: "";
+                position: absolute;
+                width: 0;
+                height: 0;
+                left: auto;
+                right: -8px;
+                bottom: -30px;
+                border: 20px solid;
+                border-color: #fff #fff transparent transparent;
+            }
+            .menu-item.actives .menu-link::before {
+                content: "";
+                position: absolute;
+                width: 0;
+                height: 0;
+                left: auto;
+                right: -8px;
+                top: -30px;
+                border: 20px solid;
+                border-color: transparent #fff #fff transparent;
+            }
+        </style>
+
+        <!-- Page CSS -->
+
+        <!-- Helpers -->
+        <script src="/static/assets/vendor/js/helpers.js"></script>
+
+        <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+        <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+        <script src="/static/assets/js/config.js"></script>
+    </head>
+
+    <body>
+        <!-- Layout wrapper -->
+        <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+                <!-- Menu -->
+
+                <aside
+                    id="layout-menu"
+                    class="layout-menu menu-vertical menu bg-menu-theme"
+                >
+                    <div class="app-brand demo">
+                        <a
+                            href="http://127.0.0.1:5000/verifikasi"
+                            class="app-brand-link"
+                        >
+                            <span class="app-brand-logo demo">
+                                <img
+                                    src="/static/assets/logo rs.png"
+                                    width="50"
+                                    alt=""
+                                />
+                            </span>
+                            <span
+                                class="fw-bolder ms-2 text-white"
+                                style="
+                                    text-transform: uppercase;
+                                    font-size: 13px;
+                                "
+                                >RSUD DR. DARSONO</span
+                            >
+                        </a>
+
+                        <a
+                            href="javascript:void(0);"
+                            class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"
+                        >
+                            <i
+                                class="bx bx-chevron-left bx-sm align-middle"
+                            ></i>
+                        </a>
+                    </div>
+
+                    <!-- <div class="menu-inner-shadow"></div> -->
+
+                    <ul class="menu-inner py-1 pt-5">
+                        <!-- Dashboard -->
+                        {%if menu == 'dashboard'%}
+                        <li class="menu-item actives">{%else%}</li>
+
+                        <li class="menu-item">
+                            {% endif %}
+                            <a
+                                href="http://127.0.0.1:5000/verifikasi"
+                                class="menu-link"
+                            >
+                                <i
+                                    class="menu-icon tf-icons bx bx-home-circle"
+                                ></i>
+                                <div data-i18n="Analytics">Dashboard</div>
+                            </a>
+                        </li>
+                        {% if menu == 'verifikasi4' %}
+                        <li class="menu-item actives">{% else %}</li>
+
+                        <li class="menu-item">
+                            {% endif %}
+                            <a
+                                href="http://127.0.0.1:5000/verifikasi/verif"
+                                class="menu-link"
+                            >
+                                <i
+                                    class="menu-icon tf-icons bx bx-calendar-check"
+                                ></i>
+                                <div data-i18n="Analytics">Verifikasi</div>
+                            </a>
+                        </li>
+
+                        <!-- Riwayat Transaksi -->
+            {% if menu == 'transaksi_gudang' %}
+            <li class="menu-item actives riwayat-transaksi">
+            {% else %}
+            <li class="menu-item riwayat-transaksi">
+            {% endif %}
+            <a href="/verifikasi/transaksi_verifikasi" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-money"></i>
+
+            <div data-i18n="Analytics">Riwayat Transaksi</div>
+            </a>
+            </li>
+
+                        <li class="menu-item">
+                            <a
+                                href="http://127.0.0.1:5000/login"
+                                class="menu-link"
+                            >
+                                <i class="menu-icon tf-icons bx bx-log-out"></i>
+                                <div data-i18n="Analytics">Logout</div>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+                <!-- / Menu -->
+
+                <!-- Layout container -->
+                <div class="layout-page">
+                    <!-- Navbar -->
+
+                    <nav
+                        class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                        id="layout-navbar"
+                    >
+                        <div
+                            class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none"
+                        >
+                            <a
+                                class="nav-item nav-link px-0 me-xl-4"
+                                href="javascript:void(0)"
+                            >
+                                <i class="bx bx-menu bx-sm"></i>
+                            </a>
+                        </div>
+
+                        <div
+                            class="navbar-nav-right d-flex align-items-center"
+                            id="navbar-collapse"
+                        >
+                            <!-- Search -->
+
+                            <!-- /Search -->
+
+                            <ul
+                                class="navbar-nav flex-row align-items-center ms-auto"
+                            >
+                                <!-- Place this tag where you want the button to render. -->
+                                <li class="nav-item lh-1 me-3">
+                                    <a href="">
+                                        <svg
+                                            id="notif-icon"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="#ffffff"
+                                            width="28"
+                                            height="28"
+                                        >
+                                            <path
+                                                d="M12 22a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22zm7-7.414V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v4.586l-1.707 1.707A.996.996 0 0 0 3 17v1a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-1a.996.996 0 0 0-.293-.707L19 14.586z"
+                                            ></path>
+                                        </svg>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+
+                    <!-- / Navbar -->
+
+                    <!-- Content wrapper -->
+                    <div class="content-wrapper">
+                        <!-- Content -->
+                        {% block content %}{% endblock %}
+                        <!-- / Content -->
+
+
+                        <!-- Footer -->
+                        <footer class="content-footer footer bg-footer-theme">
+                            <div
+                                class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column"
+                            >
+                                <div class="mb-2 mb-md-0">
+                                    ©
+                                    <script>
+                                        document.write(
+                                            new Date().getFullYear()
+                                        );
+                                    </script>
+                                    RSUD DR. DARSONO
+                                </div>
+                            </div>
+                        </footer>
+                        <!-- / Footer -->
+
+                        <div class="content-backdrop fade"></div>
+                    </div>
+                    <!-- Content wrapper -->
+                </div>
+                <!-- / Layout page -->
+            </div>
+
+            <!-- Overlay -->
+            <div class="layout-overlay layout-menu-toggle"></div>
+        </div>
+        <!-- / Layout wrapper -->
+
+        <!-- Core JS -->
+        <!-- build:js assets/vendor/js/core.js -->
+        <script src="/static/assets/vendor/libs/jquery/jquery.js"></script>
+        <script src="/static/assets/vendor/libs/popper/popper.js"></script>
+        <script src="/static/assets/vendor/js/bootstrap.js"></script>
+        <script src="/static/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+        <script src="/static/assets/vendor/js/menu.js"></script>
+        <!-- endbuild -->
+
+        <!-- Vendors JS -->
+        <script src="/static/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+        <!-- Main JS -->
+        <script src="/static/assets/js/main.js"></script>
+
+        <!-- Page JS -->
+        <script src="/static/assets/js/dashboards-analytics.js"></script>
+
+        <!-- Place this tag in your head or just before your close body tag. -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+        <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+
+
+        {% block scripts %} {% endblock %}
+    </body>
+</html>

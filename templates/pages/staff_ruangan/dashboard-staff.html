@@ -1,0 +1,179 @@
+{% extends 'layouts/master_ruangan.html' %} {% block content %}
+<style>
+  .heading-info {
+    color: black;
+    font-weight: 700;
+  }
+</style>
+<section class="m-5">
+  <div class="row d-flex">
+    <div style="width: 260px" class="card mb-3 mx-2">
+      <div class="row p-4">
+        <div class="col-7 d-flex flex-column justify-content-center align-items-center">
+          <h1 id="totalPengajuan" style="color: #58c4dc; font-size: 5rem; line-height: 1" class="fw-bold">
+            0
+          </h1>
+          <p>Total Pengajuan</p>
+        </div>
+        <div style="padding: 0px 0px" class="col-5">
+          <div class="bg-success card p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path
+                fill="#1a7d18"
+                d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zm64 64V416H224V160H64zm384 0H288V416H448V160z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="width: 260px" class="card mb-3 mx-2">
+      <div class="row p-4">
+        <div class="col-7 d-flex flex-column justify-content-center align-items-center">
+          <h1 id="totalPengusulan" style="color: #58c4dc; font-size: 5rem; line-height: 1" class="fw-bold">
+            0
+          </h1>
+          <p>Total Pengusulan</p>
+        </div>
+        <div style="padding: 0px 0px" class="col-5">
+          <div class="bg-warning card p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path
+                fill="white"
+                d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="width: 260px" class="card mb-3 mx-2">
+      <div class="row p-4">
+        <div class="col-7 d-flex flex-column justify-content-center align-items-center">
+          <h1 id="totalStock" style="color: #58c4dc; font-size: 5rem; line-height: 1" class="fw-bold">
+            0
+          </h1>
+          <p>Total Stock</p>
+        </div>
+        <div style="padding: 0px 0px" class="col-5">
+          <div class="bg-danger card p-2 py-3" style="height: 5123">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+              <path
+                fill="white"
+                d="M58.9 42.1c3-6.1 9.6-9.6 16.3-8.7L320 64 564.8 33.4c6.7-.8 13.3 2.7 16.3 8.7l41.7 83.4c9 17.9-.6 39.6-19.8 45.1L439.6 217.3c-13.9 4-28.8-1.9-36.2-14.3L320 64 236.6 203c-7.4 12.4-22.3 18.3-36.2 14.3L37.1 170.6c-19.3-5.5-28.8-27.2-19.8-45.1L58.9 42.1zM321.1 128l54.9 91.4c14.9 24.8 44.6 36.6 72.5 28.6L576 211.6v167c0 22-15 41.2-36.4 46.6l-204.1 51c-10.2 2.6-20.9 2.6-31 0l-204.1-51C79 419.7 64 400.5 64 378.5v-167L191.6 248c27.8 8 57.6-3.8 72.5-28.6L318.9 128h2.2z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="width: 260px" class="card mb-3 mx-2">
+      <div class="row p-4">
+        <div class="col-7 d-flex flex-column justify-content-center align-items-center">
+          <h1 id="totalTransaksi" style="color: #58c4dc; font-size: 5rem; line-height: 1" class="fw-bold">
+            0
+          </h1>
+          <p>Total Transaksi</p>
+        </div>
+        <div style="padding: 0px 0px" class="col-5">
+          <div class="bg-info card p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path
+                fill="white"
+                d="M448 480H64c-35.3 0-64-28.7-64-64V192H512V416c0 35.3-28.7 64-64 64zm64-320H0V96C0 60.7 28.7 32 64 32H192c20.1 0 39.1 9.5 51.2 25.6l19.2 25.6c6 8.1 15.5 12.8 25.6 12.8H448c35.3 0 64 28.7 64 64z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <h1 class="fw-bold">Status Pemesanan</h1>
+  <h1 class="fw-bold">{{username}}</h1>
+  <div class="table-responsive">
+      <table id="dashboard" class="display" style="width: 100%">
+          <thead class="tex-center">
+              <tr>
+                  <th>No.</th>
+                  <th>Tanggal Pengajuan / Pengusulan</th>
+                  <th>Jenis Layanan</th>
+                  <th>Status</th>
+                  <th>Tanggal Penerimaan</th>
+                  
+              </tr>
+          </thead>
+          <tbody>
+          </tbody>
+      </table>
+  </div>
+  
+</section>
+{% endblock %} {% block scripts %}
+<script>
+  $(document).ready(function () {
+    $("#dashboard").DataTable({
+      "language": {
+          "emptyTable": ' '
+      }      
+    });
+  });
+</script>
+<script>
+
+  fetch('http://127.0.0.1:5000/api/transaksi/dashboard')
+    .then(response => response.json())
+    .then(data => {
+        // Step 2: Calculate Totals
+        const totalPengajuan = data.pengajuan_barang.length;
+        const totalPengusulan = data.pengusulan.length;
+        const totalStock = data.pengajuan_barang.reduce((acc, item) => acc + parseInt(item.jumlah, 10), 0);
+        const totalTransaksi = totalPengajuan + totalPengusulan;
+
+        // Update the totals in the HTML
+        document.getElementById('totalPengajuan').innerText = totalPengajuan;
+        document.getElementById('totalPengusulan').innerText = totalPengusulan;
+        document.getElementById('totalStock').innerText = totalStock;
+        document.getElementById('totalTransaksi').innerText = totalTransaksi;
+
+        // Step 3: Populate the Table
+        const tableBody = document.querySelector('#dashboard tbody');
+                // Function to determine button color based on status
+        const getStatusButton = (status) => {
+            if (status === 'Success') {
+                return '<span class="btn btn-sm btn-success rounded-3">Success</span>';
+            } else if (status === 'Process') {
+                return '<span class="btn btn-sm btn-warning rounded-3">Process</span>';
+            } else {
+                return '<span class="btn btn-sm btn-danger rounded-3">Decline</span>';
+            }
+        };
+        data.pengajuan_barang.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${item.tanggal_pengajuan}</td>
+                <td>Pengajuan</td>
+                <td>${getStatusButton(item.status)}</td>
+                <td>${item.tanggal_penerimaan || ''}</td>
+               
+            `;
+            tableBody.appendChild(row);
+        });
+
+        data.pengusulan.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${totalPengajuan + index + 1}</td>
+                <td>${item.tanggal_pengusulan}</td>
+                <td>Pengusulan</td>
+                <td>${getStatusButton(item.status)}</td>
+                <td>${item.tanggal_penerimaan || ''}</td>
+               
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // Initialize DataTable
+        $('#dashboard').DataTable();
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+</script>
+{% endblock %}

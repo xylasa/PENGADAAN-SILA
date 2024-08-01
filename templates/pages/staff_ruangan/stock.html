@@ -1,0 +1,63 @@
+{% extends 'layouts/master_ruangan.html' %} 
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="col-xl-12">
+    <!-- HTML5 Inputs -->
+    <div class="card-header">
+      <h2 class="text-uppercase">Daftar Stock Tersedia Di Gudang </h2>
+    </div>
+
+    <!-- ================ Order Details List ================= -->
+    <div class="row justify-content-center">
+      <div class="col-12 card">
+        <div class="card-body table-responsive text-nowrap">
+          <table class="table" id="stockTable" style="width: 100%">
+            <thead>
+              <tr>
+                <th class="text-center">No</th>
+                <th>Kategori</th>
+                <th>Nama Barang</th>
+                <th>Satuan</th>
+                <th>Jumlah</th>
+              </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+              {% for item in items %}
+                <tr>
+                  <td class="text-center">{{ loop.index }}</td>
+                  <td>{{ item['category_info']['nama_kategori'] }}</td>
+                  <td>{{ item['nama_barang'] }}</td>
+                  <td>{{ item['satuan'] }}</td>
+                  <td>{{ item['stock_tersedia'] }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    $('#stockTable').DataTable({
+      searching: true,
+      paging: true,
+      lengthChange: true,
+      pageLength: 10,
+      lengthMenu: [10, 25, 50, 100],
+      language: {
+        paginate: {
+          previous: "Previous",
+          next: "Next"
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

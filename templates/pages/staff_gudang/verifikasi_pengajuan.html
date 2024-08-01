@@ -1,0 +1,67 @@
+{% extends 'layouts/master_gudang.html' %} {% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row justify-content-center">
+        <div class="col-12 card">
+            <div class="card-header">
+                <h2 class="text-uppercase">Verifikasi Pengajuan Barang</h2>
+            </div>
+            <div class="card-body overflow-auto">
+                <table id="pengajuan" class="display" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Ruangan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in data %}
+                        <tr>
+                            <td>{{product.no}}</td>
+                            <td>{{product.tanggal}}</td>
+                            <td>{{product.ruangan}}</td>
+                            <td>
+                                <a
+                                href="{{ url_for('verifikasi_detail_pengajuan', item_id=product.id) }}"
+                                >
+                                    <span class="btn btn-primary rounded-pill"
+                                        >Detail</span
+                                    >
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} {% block scripts %}
+<!-- Sertakan jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Sertakan CSS dan JS DataTables -->
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"
+/>
+<script
+    type="text/javascript"
+    charset="utf8"
+    src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"
+></script>
+
+<script>
+    $(document).ready(function () {
+        $("#pengajuan").DataTable({
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/Indonesian.json",
+            },
+        });
+    });
+</script>
+{% endblock %}

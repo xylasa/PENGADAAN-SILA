@@ -1,0 +1,396 @@
+{% extends 'layouts/master_verifikasi.html' %} {% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="col-xl-12">
+        <!-- HTML5 Inputs -->
+        <div class="card-header">
+            <h2 class="text-uppercase">Detail Verifikasi Pengusulan Barang</h2>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="mb-3 row">
+                    <label for="ruang-input" class="col-md-2 col-form-label"
+                        >Ruang</label
+                    >
+                    <div class="col-md-10">
+                        <input
+                            class="form-control"
+                            type="text"
+                            id="ruang-input"
+                            value="{{document.ruangan}}"
+                            readonly
+                        />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label
+                        for="tanggal-pengajuan-input"
+                        class="col-md-2 col-form-label"
+                        >Tanggal Pengajuan</label
+                    >
+                    <div class="col-md-10">
+                        <input
+                            class="form-control"
+                            type="text"
+                            id="tanggal-pengajuan-input"
+                            value="{{ document.tanggal_pengusulan }}"
+                            readonly
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 card">
+            <div class="card-body table-responsive text-nowrap">
+                <table class="table" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Barang</th>
+                            <th>Volume</th>
+                            <th>Type/Merk</th>
+                            <th>Status</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                        <tbody class="table-border-bottom-0">
+                            {% for detail in items %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ detail.nama_barang }}</td>
+                                <td>{{ detail.volume }}</td>
+                                <td>{{ detail.merek }}</td>
+                                <td>
+                                    {% if detail.status == "Decline" %}
+                                        Ditolak
+                                    {% elif detail.status == "Success" %}
+                                        Diterima
+                                    {% else %}
+                                        <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#rejectModal" data-id="{{ detail._id }}">
+                                            ✖️
+                                        </button>
+                                        <button type="button" class="btn btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#accModal" data-id="{{ detail._id }}">
+                                            ✔️
+                                        </button>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if detail.status == "Decline" %}
+                                        {{ detail.alasan }}
+                                    {% else %}
+                                        {% if detail.status == "Success" %}
+                                            Diverifikasi ({{ detail.jumlah_diterima }})
+                                        {% else %}
+                                            Belum Diverifikasi
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+                        <!-- Modal Reject -->
+                        <div
+                            class="modal fade"
+                            id="rejectModal"
+                            tabindex="-1"
+                            aria-hidden="true"
+                        >
+                            <div
+                                class="modal-dialog modal-dialog-centered"
+                                role="document"
+                            >
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5
+                                            class="modal-title"
+                                            id="exampleModalLabel1"
+                                        >
+                                            Alasan Ditolak
+                                        </h5>
+                                        <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="rejectForm">
+                                            <input
+                                                type="hidden"
+                                                id="reject-id"
+                                                name="id_ajukan"
+                                                value=""
+                                            />
+                                            <div class="row">
+                                                <div class="col mb-3">
+                                                    <label
+                                                        for="reject-reason"
+                                                        class="form-label"
+                                                        >Alasan</label
+                                                    >
+                                                    <input
+                                                        type="text"
+                                                        id="reject-reason"
+                                                        class="form-control"
+                                                        name="reason"
+                                                        placeholder=""
+                                                    />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-secondary"
+                                            style="outline: #9cbee4"
+                                            data-bs-dismiss="modal"
+                                        >
+                                            Close
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="btn"
+                                            style="
+                                                background-color: #9cbee4;
+                                                color: white;
+                                            "
+                                            onclick="submitRejectForm()"
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Reject-->
+                        <!-- Modal Reject -->
+                        <div
+                            class="modal fade"
+                            id="accModal"
+                            tabindex="-1"
+                            aria-hidden="true"
+                        >
+                            <div
+                                class="modal-dialog modal-dialog-centered"
+                                role="document"
+                            >
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5
+                                            class="modal-title"
+                                            id="exampleModalLabel1"
+                                        >
+                                            Jumlah Diterima
+                                        </h5>
+                                        <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="acceptForm">
+                                            <input
+                                                type="hidden"
+                                                id="id_ajukan"
+                                                name="id_ajukan"
+                                                value="{{document._id}}"
+                                            />
+                                            <div class="row">
+                                                <div class="col mb-3">
+                                                    <label
+                                                        for="accept-amount"
+                                                        class="form-label"
+                                                        >Jumlah</label
+                                                    >
+                                                    <input
+                                                        type="text"
+                                                        id="accept-amount"
+                                                        class="form-control"
+                                                        name="jumlah_diterima"
+                                                        placeholder=""
+                                                    />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-secondary"
+                                            style="outline: #9cbee4"
+                                            data-bs-dismiss="modal"
+                                        >
+                                            Close
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="btn"
+                                            style="
+                                                background-color: #9cbee4;
+                                                color: white;
+                                            "
+                                            onclick="submitAcceptForm()"
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Reject-->
+<script>
+    // Function to handle button clicks
+    document.addEventListener("DOMContentLoaded", function () {
+        // Select the buttons
+        const accButton = document.querySelector(
+            '[data-bs-target="#accModal"]'
+        );
+        const rejectButton = document.querySelector(
+            '[data-bs-target="#rejectModal"]'
+        );
+
+        // Add click event listener to each button
+        accButton.addEventListener("click", function () {
+        });
+
+        rejectButton.addEventListener("click", function () {
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var rejectModal = document.getElementById("rejectModal");
+        var accModal = document.getElementById("accModal");
+
+        rejectModal.addEventListener("show.bs.modal", function (event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute("data-id");
+            document.getElementById("reject-id").value = id;
+        });
+
+        accModal.addEventListener("show.bs.modal", function (event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute("data-id");
+            document.getElementById("accept-id").value = id;
+        });
+    });
+
+    function submitRejectForm() {
+        var form = document.getElementById("rejectForm");
+        var id = form.elements["id_ajukan"].value;
+        var reason = form.elements["reason"].value;
+
+        var status = "Decline";
+
+        fetch("http://127.0.0.1:5000/api/verifikasi/verif", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_ajukan: id,
+                alasan: reason,
+                jumlah_diterima: 0,
+                status: status,
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Success:", data);
+                $("#rejectModal").modal("hide");
+                location.reload();
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred");
+            });
+    }
+
+    function submitAcceptForm() {
+        var form = document.getElementById("acceptForm");
+        var id = document.getElementById('id_ajukan').value
+        var jumlah_diterima = parseInt(
+            form.elements["jumlah_diterima"].value,
+            10
+        );
+
+        var status = "Success";
+
+        fetch("http://127.0.0.1:5000/api/verifikasi/verif", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_ajukan: id,
+                jumlah_diterima: jumlah_diterima,
+                status: status,
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(response.data);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Success:", data);
+                $("#accModal").modal("hide");
+                location.reload();
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred");
+            });
+    }
+
+    async function updateNotificationStatus() {
+        try {
+            const response = await fetch(
+                "http://127.0.0.1:5000/api/verifikasi/ajukan"
+            );
+            const data = await response.json();
+            const kepalaBagianData = data.verifikasi;
+
+            // Assuming the newest data is the last element in the array
+            const newestData =
+                kepalaBagianData[kepalaBagianData.length - 1];
+            const statusnew = newestData.status;
+            const notifIcon = document.getElementById("notif-icon");
+
+            if (statusnew === "Process") {
+                notifIcon.style.fill = "yellow";
+            } else {
+                notifIcon.style.fill = "#566a7f";
+            }
+        } catch (error) {
+            console.error("Error fetching notification status:", error);
+        }
+    }
+
+    // Update notification status when the page loads
+    window.addEventListener(
+        "DOMContentLoaded",
+        updateNotificationStatus
+    );
+</script>
+
+{% endblock %}

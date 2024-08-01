@@ -1,0 +1,72 @@
+{% extends 'layouts/master_ruangan.html' %} {% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="col-xl-12">
+    <!-- HTML5 Inputs -->
+    <div class="card-header">
+      <h2 class="text-uppercase">Detail Riwayat Transaksi</h2>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="mb-3 row">
+                <label for="ruang-input" class="col-md-2 col-form-label">Ruang</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="text" id="ruang-input" value="{{ document.ruangan }}" readonly/>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="tanggal-pengajuan-input" class="col-md-2 col-form-label">Tanggal Pengajuan</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="text" id="tanggal-pengajuan-input" value="{{ document.tanggal_pengusulan }}" readonly/>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="tanggal-penerimaan-input" class="col-md-2 col-form-label">Tanggal Penerimaan</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="text" id="tanggal-penerimaan-input" value="{{ document.tanggal_penerimaan }}" readonly/>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="keterangan-input" class="col-md-2 col-form-label">Keterangan</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="text" id="keterangan-input" value="{{ document.keterangan }}" readonly/>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+  <div class="row justify-content-center">
+    <div class="col-12 card">
+      <div class="card-body table-responsive text-nowrap">
+        <table class="table" style="width: 100%">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Barang</th>
+              <th>Volume</th>
+              <th>Type/merk</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            {% for item in items %}
+            <tr>
+              <td>{{ item.no }}</td>
+              <td>{{ item.nama_barang }}</td>
+              <td>{{ item.volume }}</td>
+              <td>{{ item.merek }}</td>
+              <td>{% if item.status == "Decline" %} Tidak Diverifikasi {% else %} {% if item.status == "Success" %} Terverifikasi ({{
+              item.jumlah_diterima }}) {% else %} Belum Diverifikasi {%
+              endif %} {% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

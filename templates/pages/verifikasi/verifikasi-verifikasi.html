@@ -1,0 +1,47 @@
+{% extends 'layouts/master_verifikasi.html' %} {% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row justify-content-center">
+        <div class="col-12 card">
+            <div class="card-header">
+                <h2 class="text-uppercase">Verifikasi Pengusulan Barang</h2>
+            </div>
+            <div class="card-body overflow-auto">
+                <table id="pengusulan" class="display" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Ruangan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in data %}
+                        <tr>
+                            <td>{{product.no}}</td>
+                            <td>{{product.tanggal}}</td>
+                            <td>{{product.ruangan}}</td>
+                            <td>
+                                <a
+                                href="{{ url_for('verifikasiDetailVerifikasi', item_id=product.id) }}"
+                                >
+                                    <span class="btn btn-primary rounded-pill"
+                                        >Detail</span
+                                    >
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} {% block scripts %}
+<script>
+    $("#pengusulan").DataTable();
+</script>
+{% endblock %}

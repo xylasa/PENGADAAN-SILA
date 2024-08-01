@@ -1,0 +1,102 @@
+{% extends 'layouts/master_verifikasi.html' %} {% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="row justify-content-center">
+    <div class="col-12 card">
+      <div class="card-header">
+        <h2
+          class="text-uppercase fw-semibold"
+          style="color: black"
+        >
+          Riwayat Transaksi
+        </h2>
+      </div>
+      <div class="card-body">
+        <form class="row justify-content-center mb-2" method="GET" action="{{ url_for('transaksiVerifikasi') }}">
+          <div class="mb-4 col-md-6">
+              <div class="form-group row">
+                  <label for="tglstart" class="col-sm-3 col-form-label">Tanggal Mulai</label>
+                  <div class="col-sm-9">
+                      <input type="date" class="form-control" id="tglstart" name="tglstart" value="{{ tglstart }}">
+                  </div>
+              </div>
+          </div>
+          <div class="mb-4 col-md-6">
+              <div class="form-group row">
+                  <label for="tglend" class="col-sm-3 col-form-label">Tanggal Selesai</label>
+                  <div class="col-sm-9">
+                      <input type="date" class="form-control" id="tglend" name="tglend" value="{{ tglend }}">
+                  </div>
+              </div>
+          </div>
+          <div class="mb-4 col-md-12">
+              <div class="form-group row">
+                  <label for="ruangan" class="col-sm-2 col-form-label text-center">Ruangan</label>
+                  <div class="col-sm-8">
+                      <select class="form-control" id="ruangan" name="ruangan">
+                          <option value="" {% if ruangan == '' %}selected{% endif %}>All</option>
+                          <option value="A" {% if ruangan == 'A' %}selected{% endif %}>A</option>
+                          <option value="B" {% if ruangan == 'B' %}selected{% endif %}>B</option>
+                          <option value="C" {% if ruangan == 'C' %}selected{% endif %}>C</option>
+                          <option value="D" {% if ruangan == 'D' %}selected{% endif %}>D</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col d-flex justify-content-center mt-4">
+                  <button type="submit" class="d-flex align-items-center btn text-white" style="background-color:#9CBEE4;">
+                      Submit
+                  </button>
+              </div>
+          </div>
+      </form>
+
+        <div class="table-responsive">
+          <table
+            id="pengusulan"
+            class="display"
+            style="width: 100%"
+          >
+            <thead>
+              <tr>
+                <th class="text-start">No</th>
+                <th>Tanggal</th>
+                <th>Keterangan</th>
+                <th>Ruangan</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in data %}
+              <tr>
+                <td class="text-center">{{item["no"]}}</td>
+                <td>{{item["tanggal_pengusulan"]}}</td>
+                <td>
+                  <button class="btn btn-sm {% if item.status == 'Success' %} btn-success {% elif item.status == 'Pending' %} btn-warning {% elif item.status == 'Process' %} btn-warning {% elif item.status == 'Decline' %} btn-danger {% endif %} rounded-3" style="min-width: 123px;">
+                    {% if item.status == "Decline" %} Tidak Terverifikasi {% else %} {% if item.status == "Success" %} Terverifikasi ({{
+                    item.jumlah_diterima }}) {% else %} Belum Diverifikasi 
+                    {% endif %} {% endif %}
+                </button>
+                </td>
+                <td>{{item["ruangan"]}}</td>
+                <td>
+                  <a href="{{ url_for('verifikasiDetailTransaksi', id=item.id) }}">
+                    <span class="btn btn-sm btn-primary rounded-3 px-4">Detail</span>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %} {% block scripts %}
+<script>
+  $('#pengusulan').DataTable();
+
+</script>
+{% endblock %}
