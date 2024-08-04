@@ -127,7 +127,7 @@
                 >
                     <div class="app-brand demo">
                         <a
-                            href="http://127.0.0.1:5000/staff_gudang"
+                            href="/staff_gudang"
                             class="app-brand-link"
                         >
                             <span class="app-brand-logo demo">
@@ -167,7 +167,7 @@
                         <li class="menu-item">
                             {% endif %}
                             <a
-                                href="http://127.0.0.1:5000/staff_gudang"
+                                href="/staff_gudang"
                                 class="menu-link"
                             >
                                 <i
@@ -201,7 +201,7 @@
                         <li class="menu-item riwayat-transaksi">
                             {% endif %}
                             <a
-                                href="http://127.0.0.1:5000/staff_gudang/transaksi"
+                                href="/staff_gudang/transaksi"
                                 class="menu-link"
                             >
                                 <i class="menu-icon tf-icons bx bx-money"></i>
@@ -214,7 +214,7 @@
 
                         <li class="menu-item">
                             <a
-                                href="http://127.0.0.1:5000/login"
+                                href="/login"
                                 class="menu-link"
                             >
                                 <i class="menu-icon tf-icons bx bx-log-out"></i>
@@ -514,7 +514,7 @@
 
                 var status = "Decline";
 
-                fetch("http://127.0.0.1:5000/api/staff_gudang/verifikasi", {
+                fetch("/api/staff_gudang/verifikasi", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -553,7 +553,7 @@
 
                 var status = "Success";
 
-                fetch("http://127.0.0.1:5000/api/staff_gudang/verifikasi", {
+                fetch("/api/staff_gudang/verifikasi", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
