@@ -227,6 +227,32 @@
   </div>
 </div>
 
+<div class="modal fade" id="errorminus" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">
+          Terjadi Kesalahan
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-top: -20px">
+          <hr />
+          <h5 style="margin-bottom: 1.5%;">Nilai yang diajukan tidak sesuai</h5>
+          <hr />
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn text-white" style="background-color: #9cbee4" data-bs-dismiss="modal">
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="editPengajuanBarang" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -490,7 +516,7 @@
         .catch((error) => console.error("Error:", error));
     }
     function usulkanBarang(id) {
-      fetch("http://127.0.0.1:5000/api/staff_gudang/ajukan", {
+      fetch("/api/staff_gudang/ajukan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -543,7 +569,7 @@
       const rows = table.querySelectorAll("tbody tr");
       rows.forEach((row) => {
         const id = row.getAttribute("data-id");
-        fetch("http://127.0.0.1:5000/api/staff_gudang/ajukan", {
+        fetch("/api/staff_gudang/ajukan", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -622,13 +648,18 @@
           if (quantityInput > stockAvailable) {
             const modalErrorStock = new bootstrap.Modal(document.getElementById('errorStockInsufficient'));
             modalErrorStock.show();
-          } else {
+          }else if(quantityInput <= 0) {
+            const modalErrorMinus = new bootstrap.Modal(document.getElementById('errorminus'));
+            modalErrorMinus.show();
+          }else {
             document.getElementById('sendBtn').click();
           }
         } else {
           const modalError = new bootstrap.Modal(document.getElementById('errorGeneralBarangSudahAda'));
           modalError.show();
         }
+
+        
       }
     });
 

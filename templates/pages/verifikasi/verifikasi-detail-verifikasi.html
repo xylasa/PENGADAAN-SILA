@@ -295,7 +295,7 @@
 
         var status = "Decline";
 
-        fetch("http://127.0.0.1:5000/api/verifikasi/verif", {
+        fetch("/api/verifikasi/verif", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -334,7 +334,7 @@
 
         var status = "Success";
 
-        fetch("http://127.0.0.1:5000/api/verifikasi/verif", {
+        fetch("/api/verifikasi/verif", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -365,7 +365,7 @@
     async function updateNotificationStatus() {
         try {
             const response = await fetch(
-                "http://127.0.0.1:5000/api/verifikasi/ajukan"
+                "/api/verifikasi/ajukan"
             );
             const data = await response.json();
             const kepalaBagianData = data.verifikasi;
