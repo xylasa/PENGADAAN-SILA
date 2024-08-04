@@ -94,7 +94,7 @@
 
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="http://127.0.0.1:5000/kepala_bidang" class="app-brand-link">
+                    <a href="/kepala_bidang" class="app-brand-link">
                         <span class="app-brand-logo demo">
                             <img src="/static/assets/logo rs.png" width="50" alt="" />
                         </span>
@@ -119,7 +119,7 @@
 
                     <li class="menu-item">
                         {% endif %}
-                        <a href="http://127.0.0.1:5000/kepala_bidang" class="menu-link">
+                        <a href="/kepala_bidang" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Analytics">Dashboard</div>
                         </a>
@@ -129,7 +129,7 @@
 
                     <li class="menu-item">
                         {% endif %}
-                        <a href="http://127.0.0.1:5000/kepala_bidang/verif" class="menu-link">
+                        <a href="/kepala_bidang/verif" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-calendar-check"></i>
                             <div data-i18n="Analytics">Verifikasi</div>
                         </a>
@@ -153,14 +153,14 @@
 
                     <li class="menu-item">
                         {% endif %}
-                        <a href="http://127.0.0.1:5000/kepala_bidang/report_informatif" class="menu-link">
+                        <a href="/kepala_bidang/report_informatif" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-calendar-check"></i>
                             <div data-i18n="Analytics">Report Informatif</div>
                         </a>
                     </li>
 
                     <li class="menu-item">
-                        <a href="http://127.0.0.1:5000/login" class="menu-link">
+                        <a href="/login" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-log-out"></i>
                             <div data-i18n="Analytics">Logout</div>
                         </a>
@@ -365,7 +365,7 @@
 
             var status = "Decline";
 
-            fetch("http://127.0.0.1:5000/api/kepala_bagian/verifikasi", {
+            fetch("/api/kepala_bagian/verifikasi", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -404,7 +404,7 @@
 
             var status = "Success";
 
-            fetch("http://127.0.0.1:5000/api/kepala_bagian/verifikasi", {
+            fetch("/api/kepala_bagian/verifikasi", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -436,7 +436,7 @@
         async function updateNotificationStatus() {
             try {
                 const response = await fetch(
-                    "http://127.0.0.1:5000/api/kepala_bagian/ajukan"
+                    "/api/kepala_bagian/ajukan"
                 );
                 const data = await response.json();
                 const kepalaBagianData = data.kepala_bagian;

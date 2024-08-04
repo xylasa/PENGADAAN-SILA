@@ -112,7 +112,7 @@
                 >
                     <div class="app-brand demo">
                         <a
-                            href="http://127.0.0.1:5000/sub_bag"
+                            href="/sub_bag"
                             class="app-brand-link"
                         >
                             <span class="app-brand-logo demo">
@@ -146,7 +146,7 @@
                         <li class="menu-item">
                             {% endif %}
                             <a
-                                href="http://127.0.0.1:5000/sub_bag"
+                                href="/sub_bag"
                                 class="menu-link"
                             >
                                 <i
@@ -160,7 +160,7 @@
                         <li class="menu-item">
                             {% endif %}
                             <a
-                                href="http://127.0.0.1:5000/sub_bag/verif"
+                                href="/sub_bag/verif"
                                 class="menu-link"
                             >
                                 <i
@@ -183,7 +183,7 @@
             </li>
                         <li class="menu-item">
                             <a
-                                href="http://127.0.0.1:5000/login"
+                                href="/login"
                                 class="menu-link"
                             >
                                 <i class="menu-icon tf-icons bx bx-log-out"></i>
@@ -464,7 +464,7 @@
 
                 var status = "Decline";
 
-                fetch("http://127.0.0.1:5000/api/sub_bagian/verifikasi", {
+                fetch("/api/sub_bagian/verifikasi", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
