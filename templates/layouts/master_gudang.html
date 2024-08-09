@@ -519,10 +519,7 @@
                 var form = document.getElementById("rejectForm");
                 var id = form.elements["id_ajukan"].value;
                 var reason = form.elements["reason"].value;
-                var jumlah_diterima = parseInt(
-                    "0",
-                    10
-                );
+               
 
                 var status = "Decline";
 
@@ -534,7 +531,7 @@
                     body: JSON.stringify({
                         id_ajukan: id,
                         alasan: reason,
-                        jumlah_diterima: jumlah_diterima,
+                        jumlah_diterima: 0,
                         status: status,
                     }),
                 })
@@ -555,43 +552,40 @@
                     });
             }
 
-            function submitAcceptForm() {
-                var form = document.getElementById("acceptForm");
-                var id = form.elements["id_ajukan"].value;
-                var jumlah_diterima = parseInt(
-                    form.elements["jumlah_diterima"].value
-                );
+            // function submitAcceptForm() {
+            //     var form = document.getElementById("acceptForm");
+            //     var id = form.elements["id_ajukan"].value;
 
-                var status = "Success";
+            //     var status = "Success";
 
-                fetch("/api/staff_gudang/verifikasi", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id_ajukan: id,
-                        jumlah_diterima: jumlah_diterima,
-                        status: status,
-                    }),
-                })
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error(response.data);
-                        }
-                        console.log(response)
-                        return response.json();
-                    })
-                    .then((data) => {
-                        console.log("Success:", data);
-                        $("#accModal").modal("hide");
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        console.log("Error:", error);
-                        alert("Jumlah Diterima Melebihi Permintaan");
-                    });
-            }
+            //     fetch("/api/staff_gudang/verifikasi", {
+            //         method: "POST",
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //         },
+            //         body: JSON.stringify({
+            //             id_ajukan: id,
+            //             jumlah_diterima: jumlah_diterima,
+            //             status: status,
+            //         }),
+            //     })
+            //         .then((response) => {
+            //             if (!response.ok) {
+            //                 throw new Error(response.data);
+            //             }
+            //             console.log(response)
+            //             return response.json();
+            //         })
+            //         .then((data) => {
+            //             console.log("Success:", data);
+            //             $("#accModal").modal("hide");
+            //             location.reload();
+            //         })
+            //         .catch((error) => {
+            //             console.log("Error:", error);
+            //             alert("Jumlah Diterima Melebihi Permintaan");
+            //         });
+            // }
         </script>
         {% block scripts %} {% endblock %}
     </body>

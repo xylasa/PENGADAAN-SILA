@@ -105,9 +105,7 @@ def verifikasi():
     data = request.get_json()
     ajukan_id = data.get("id_ajukan")
     alasan = data.get("alasan")
-    # print(alasan)
     jumlah_diterima = data.get("jumlah_diterima")
-    # Get the current date in YYYY-MM-DD format
     current_date = datetime.now().strftime("%Y-%m-%d")
 
     if not ajukan_id or jumlah_diterima is None:
@@ -117,48 +115,52 @@ def verifikasi():
     if not ajukan:
         return jsonify({"message": "Invalid id_ajukan"}), 400
 
-    pipeline = [
-        {
-            '$lookup': {
-                'from': 'categories',
-                'localField': 'kategori_id',
-                'foreignField': '_id',
-                'as': 'category_info'
-            }
-        },
-        {
-            '$unwind': '$category_info'
-        },
-        {
-            '$match': {
-                'nama_barang': ajukan['nama_barang']
-            }
-        }
-    ]
-    barang = list(_items_collection.aggregate(pipeline))
-    if barang:
-        barang_item = barang[0]
-        new_stok_tersedia = barang_item['stock_tersedia'] - int(ajukan['jumlah'])
-
-        # Update the 'barang' item
-        _items_collection.update_one(
-            {'_id': barang_item['_id']},
-            {'$set': {'stock_tersedia': new_stok_tersedia}}
-        )
-    else:
-       return (
-            jsonify({"message": "Barang not found"}),
-            400,
-        )
-
     jumlah = int(ajukan["jumlah"])
-    if jumlah_diterima > jumlah:
-        return (
-            jsonify({"message": "Jumlah diterima cannot be greater than jumlah awal"}),
-            400,
-        )
+
+    # If there is an 'alasan', set jumlah_diterima to 0
+    if alasan:
+        jumlah_diterima = 0
+    elif jumlah_diterima > jumlah:
+        return jsonify({"message": "Jumlah diterima cannot be greater than jumlah awal"}), 400
 
     is_verif = jumlah_diterima == jumlah
+
+    if jumlah_diterima > 0:  # Only adjust stock if jumlah_diterima is greater than 0
+        pipeline = [
+            {
+                '$lookup': {
+                    'from': 'categories',
+                    'localField': 'kategori_id',
+                    'foreignField': '_id',
+                    'as': 'category_info'
+                }
+            },
+            {
+                '$unwind': '$category_info'
+            },
+            {
+                '$match': {
+                    'nama_barang': ajukan['nama_barang']
+                }
+            }
+        ]
+        barang = list(_items_collection.aggregate(pipeline))
+        if barang:
+            barang_item = barang[0]
+            new_stok_tersedia = barang_item['stock_tersedia'] - int(ajukan['jumlah'])
+            
+            # Ensure correct stock adjustment
+            if new_stok_tersedia < 0:
+                new_stok_tersedia = 0  # Prevent negative stock
+
+            update_result = _items_collection.update_one(
+                {'_id': barang_item['_id']},
+                {'$set': {'stock_tersedia': new_stok_tersedia}}
+            )
+            if update_result.modified_count == 0:
+                return jsonify({"message": "Stock update failed"}), 500
+        else:
+            return jsonify({"message": "Barang not found"}), 400
 
     result = mongo.db.staff_gudang.update_one(
         {"_id": ObjectId(ajukan_id)},

@@ -82,16 +82,16 @@ def handle_login():
         if role.startswith('staffruangan'):
             session["username"] = username
             return redirect("/staff_ruangan")
-        elif role == "Kepala Bidang":
+        elif role == "kepalabidang":
             session["username"] = username
             return redirect("/kepala_bidang")
-        elif role == "Verifikasi":
+        elif role == "verifikasi":
             session["username"] = username
             return redirect("/verifikasi")
         elif role == "Staff Gudang":
             session["username"] = username
             return redirect("/staff_gudang")
-        elif role == "Sub Bagian":
+        elif role == "subbagian":
             session["username"] = username
             return redirect("/sub_bag")
 
@@ -1388,32 +1388,66 @@ def staffRuanganDetailTransaksi(id):
 
     # Koleksi
     staff_gudang_collection = db2['staff_gudang']
-    sub_bag_collection = db2['sub_bag']
+    sub_bag_collection= db2['sub_bag']
     kepala_bagian_collection = db2['kepala_bagian']
+    
 
-    # Cari dokumen di staff_gudang
+    # Cari dokumen dsub_bag_collectioni staff_gudang
     document = staff_gudang_collection.find_one({"_id": document_id})
 
-    if not document:
-        # Jika tidak ditemukan, coba cari di sub_bag
-        document = sub_bag_collection.find_one({"_id": document_id})
-        
+    checkStaffGudangC = staff_gudang_collection.find_one({"_id": document_id})
+    checkSubBagC = sub_bag_collection.find_one({"_id": document_id})
+    checkKepalaBagianC = kepala_bagian_collection.find_one({"_id": document_id})
 
-    if not document:
-        return "Document not found", 404
+
+    if checkStaffGudangC:
+        document = checkStaffGudangC
+    if checkSubBagC:
+        document = checkSubBagC
+    if checkKepalaBagianC:
+        document = checkKepalaBagianC
+
 
     # Filter kriteria untuk dokumen terkait
-    filter_criteria = {
+    filter_criteria = {}
+
+    related_documents = list(kepala_bagian_collection.find(filter_criteria))
+
+    if checkStaffGudangC:
+        print("A")
+        filter_criteria = {
+        "id_sub_bag": document.get("id_pengusulan_barang"),
+        # "tanggal_pengusulan": document.get("tanggal_pengusulan") if document.get("tanggal_pengusulan") else document.get("tanggal_pengajuan"),
+        "tanggal_penerimaan": document.get("tanggal_penerimaan"),
+        # "ruangan": document.get("ruangan"),'
+        }
+        related_documents = list(staff_gudang_collection.find(filter_criteria))
+    if checkSubBagC:
+        print("B")
+        filter_criteria = {
+        # "id_sub_bag": document.get("id_pengusulan_barang"),
+        "tanggal_pengusulan": document.get("tanggal_pengusulan") if document.get("tanggal_pengusulan") else document.get("tanggal_pengajuan"),
+        # "tanggal_penerimaan": document.get("tanggal_penerimaan"),
+        # "ruangan": document.get("ruangan"),
+        "status": "Success"
+        }
+        related_documents = list(sub_bag_collection.find(filter_criteria))
+    if checkKepalaBagianC:
+        print("C")
+        filter_criteria = {
         # "id_sub_bag": document.get("id_pengusulan_barang"),
         "tanggal_pengusulan": document.get("tanggal_pengusulan") if document.get("tanggal_pengusulan") else document.get("tanggal_pengajuan"),
         "tanggal_penerimaan": document.get("tanggal_penerimaan"),
         "ruangan": document.get("ruangan"),
-    }
+        }
+        related_documents = list(kepala_bagian_collection.find(filter_criteria))
+
+    if not document:
+        return "Document not found", 404
 
     print("Filter criteria:", filter_criteria)
 
     # Cari dokumen terkait
-    related_documents = list(kepala_bagian_collection.find(filter_criteria))
 
     
     # Siapkan data untuk ditampilkan di template
