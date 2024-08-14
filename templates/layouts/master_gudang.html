@@ -127,7 +127,7 @@
                 >
                     <div class="app-brand demo">
                         <a
-                            href="http://127.0.0.1:5000/staff_gudang"
+                            href="/staff_gudang"
                             class="app-brand-link"
                         >
                             <span class="app-brand-logo demo">
@@ -167,7 +167,7 @@
                         <li class="menu-item">
                             {% endif %}
                             <a
-                                href="http://127.0.0.1:5000/staff_gudang"
+                                href="/staff_gudang"
                                 class="menu-link"
                             >
                                 <i
@@ -182,7 +182,7 @@
                         <li class="menu-item">
                             {% endif %}
                             <a
-                                href="http://127.0.0.1:5000/staff_gudang/verif"
+                                href="/staff_gudang/verif"
                                 class="menu-link"
                             >
                                 <i
@@ -201,7 +201,7 @@
                         <li class="menu-item riwayat-transaksi">
                             {% endif %}
                             <a
-                                href="http://127.0.0.1:5000/staff_gudang/transaksi"
+                                href="/staff_gudang/transaksi"
                                 class="menu-link"
                             >
                                 <i class="menu-icon tf-icons bx bx-money"></i>
@@ -214,7 +214,7 @@
 
                         <li class="menu-item">
                             <a
-                                href="http://127.0.0.1:5000/login"
+                                href="/login"
                                 class="menu-link"
                             >
                                 <i class="menu-icon tf-icons bx bx-log-out"></i>
@@ -330,6 +330,14 @@
                                                         class="form-control"
                                                         name="reason"
                                                         placeholder=""
+                                                    />
+                                                    <input
+                                                        type="hidden"
+                                                        id="reject-amount"
+                                                        class="form-control"
+                                                        name="jumlah_diterima"
+                                                        placeholder=""
+                                                        value="0"
                                                     />
                                                 </div>
                                             </div>
@@ -511,10 +519,11 @@
                 var form = document.getElementById("rejectForm");
                 var id = form.elements["id_ajukan"].value;
                 var reason = form.elements["reason"].value;
+               
 
                 var status = "Decline";
 
-                fetch("http://127.0.0.1:5000/api/staff_gudang/verifikasi", {
+                fetch("/api/staff_gudang/verifikasi", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -538,48 +547,45 @@
                         location.reload();
                     })
                     .catch((error) => {
-                        console.error("Error:", error);
+                        console.log("Error:", error);
                         alert("Jumlah Diterima Melebihi Permintaan");
                     });
             }
 
-            function submitAcceptForm() {
-                var form = document.getElementById("acceptForm");
-                var id = form.elements["id_ajukan"].value;
-                var jumlah_diterima = parseInt(
-                    form.elements["jumlah_diterima"].value,
-                    10
-                );
+            // function submitAcceptForm() {
+            //     var form = document.getElementById("acceptForm");
+            //     var id = form.elements["id_ajukan"].value;
 
-                var status = "Success";
+            //     var status = "Success";
 
-                fetch("http://127.0.0.1:5000/api/staff_gudang/verifikasi", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id_ajukan: id,
-                        jumlah_diterima: jumlah_diterima,
-                        status: status,
-                    }),
-                })
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error(response.data);
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        console.log("Success:", data);
-                        $("#accModal").modal("hide");
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        console.error("Error:", error);
-                        alert("Jumlah Diterima Melebihi Permintaan");
-                    });
-            }
+            //     fetch("/api/staff_gudang/verifikasi", {
+            //         method: "POST",
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //         },
+            //         body: JSON.stringify({
+            //             id_ajukan: id,
+            //             jumlah_diterima: jumlah_diterima,
+            //             status: status,
+            //         }),
+            //     })
+            //         .then((response) => {
+            //             if (!response.ok) {
+            //                 throw new Error(response.data);
+            //             }
+            //             console.log(response)
+            //             return response.json();
+            //         })
+            //         .then((data) => {
+            //             console.log("Success:", data);
+            //             $("#accModal").modal("hide");
+            //             location.reload();
+            //         })
+            //         .catch((error) => {
+            //             console.log("Error:", error);
+            //             alert("Jumlah Diterima Melebihi Permintaan");
+            //         });
+            // }
         </script>
         {% block scripts %} {% endblock %}
     </body>

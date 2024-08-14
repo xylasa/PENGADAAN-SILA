@@ -37,7 +37,7 @@
               </div>
               <div class="col">
                 <div class="mb-3">
-                  <label class="form-label" for="jumlah">Jumlah</label>
+                  <label class="form-label"  for="jumlah">Jumlah</label>
                   <input type="number" class="form-control" id="jumlah" name="jumlah" />
                 </div>
               </div>
@@ -48,7 +48,7 @@
                 </div>
               </div>
               <div class="col-1 mt-3 me-4">
-                <button type="submit" class="d-flex align-items-center btn text-white"
+                <button type="submit"  id ="tambah" class="d-flex align-items-center btn text-white"
                   style="background-color: #9cbee4">
                   <i class="bx bx-plus"></i> Tambah
                 </button>
@@ -159,6 +159,31 @@
         <div style="margin-top: -20px">
           <hr />
           <h5 style="margin-bottom: 1.5%;">Silahkan Lengkapi Seluruh Form Terlebih Dahulu</h5>
+          <hr />
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn text-white" style="background-color: #9cbee4" data-bs-dismiss="modal">
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="errorminus" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">
+          Terjadi Kesalahan
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-top: -20px">
+          <hr />
+          <h5 style="margin-bottom: 1.5%;">Nilai yang diinput tidak sesuai</h5>
           <hr />
 
         </div>
@@ -327,7 +352,7 @@
     }
 
     function ajukanBarang(id) {
-      fetch("http://127.0.0.1:5000/api/sub_bagian/ajukan", {
+      fetch("/api/sub_bagian/ajukan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -383,8 +408,8 @@
         }
 
         if (!nama_barang || !volume || !merek) {
-          // alert("Please ensure all fields are filled in each row.");
-          modalError.show();
+          alert("Please ensure all fields are filled in each row.");
+          modal.show();
           return false;
         }
       }
@@ -405,7 +430,7 @@
       const rows = table.querySelectorAll("tbody tr");
       rows.forEach((row) => {
         const id = row.getAttribute("data-id");
-        fetch("http://127.0.0.1:5000/api/sub_bagian/ajukan", {
+        fetch("/api/sub_bagian/ajukan", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -436,5 +461,26 @@
       document.getElementById("tanggal").value = formattedDate;
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const tambahButton = document.getElementById('tambah');
+      const modalErrorMinus = new bootstrap.Modal(document.getElementById('errorminus'));
+  
+      tambahButton.addEventListener('click', (event) => {
+        // Ambil elemen input
+        const quantityInput = document.getElementById('jumlah');
+        const quantity = parseInt(quantityInput.value, 10);
+  
+        // Validasi jumlah barang
+        if (quantity <= 0) {
+          // Cegah form agar tidak disubmit
+          event.preventDefault();
+          // Tampilkan modal error
+          modalErrorMinus.show();
+        }
+      });
+    });
+  </script>
+  
   {% endblock %}
 </div>

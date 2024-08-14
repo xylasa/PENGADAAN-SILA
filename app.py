@@ -69,27 +69,29 @@ def handle_login():
 
     if response.status_code == 200:
         session["username"] = username
+        # session["name"] = name
         login_response = response.json()
         role = login_response.get("role", None)
         username = login_response.get("username", None)
+        # name = login_response.get("name", None)
         session["role"] = role
 
         # if re.match(r'^Staff Ruangan [A-Z]$', username):
         #     session["username"] = username
         #     return redirect("/staff_ruangan")
-        if role.startswith('Staff Ruangan'):
+        if role.startswith('staffruangan'):
             session["username"] = username
             return redirect("/staff_ruangan")
-        elif role == "Kepala Bidang":
+        elif role == "kepalabidang":
             session["username"] = username
             return redirect("/kepala_bidang")
-        elif role == "Verifikasi":
+        elif role == "verifikasi":
             session["username"] = username
             return redirect("/verifikasi")
         elif role == "Staff Gudang":
             session["username"] = username
             return redirect("/staff_gudang")
-        elif role == "Sub Bagian":
+        elif role == "subbagian":
             session["username"] = username
             return redirect("/sub_bag")
 
@@ -951,6 +953,8 @@ def verifikasi_pengajuan():
     # Extract the sub_bag data
     verif = data.get("staff_gudang", [])
 
+    print("DATA DATA STAFFGUDANG: lllllll>>>>>>>>>>>>>>>")
+    print(verif)
     # Process data if necessary (e.g., adding additional fields)
     processed_data = []
     for i, item in enumerate(verif):
@@ -967,7 +971,7 @@ def verifikasi_pengajuan():
             }
         )
 
-    print("DATA DATA STAFFGUDANG:>>>>>>>>>>>>>>>")
+    print("DATA DATA STAFFGUDANG: gudang>>>>>>>>>>>>>>>")
     print(processed_data)
 
     return render_template(
@@ -981,7 +985,7 @@ def verifikasi_detail_pengajuan(item_id):
     api_url = f"http://127.0.0.1:5000/api/staff_gudang/ajukan/{item_id}"
     response = requests.get(api_url)
     item_detail = response.json()
-    print("DATA DATA STAFFGUDANG:>>>>>>>>>>>>>>>")
+    print("DATA DATA STAFFGUDANG: VERIF>>>>>>>>>>>>>>>")
     print(item_detail)
 
     return render_template(
@@ -1161,8 +1165,13 @@ def transaksiStaffRuangan():
 
     role = session['role']  # Ambil role pengguna dari session
     username = session['username']  # Ambil role pengguna dari session
+    user_collection = db['users'] 
+    user_data_cursor = user_collection.find_one({"username": username})
+    if user_data_cursor:
+        name = user_data_cursor.get('name')
+        print(name)
 
-    ruangan_user = find_ruangan_by_role(username)
+    ruangan_user = find_ruangan_by_role(name)
     if not ruangan_user:
         return "Role pengguna tidak valid atau tidak memiliki akses ke ruangan manapun"
 
@@ -1276,15 +1285,6 @@ def transaksiStaffRuangan():
     for item in aggregated_result:
         print(item)
 
-    # data = []
-    # for index, (key, value) in enumerate(aggregated_data.items(), start=1):
-    #     value["no"] = index
-    #     value["nama_barang"] = ', '.join(value["nama_barang"])
-    #     filtered_merek = [merek for merek in value["merek"] if merek is not None]
-    #     value["merek"] = ', '.join(filtered_merek) if filtered_merek else '-'
-    #     # value["merek"] = ', '.join(value["merek"])
-    #     data.append(value)
-
     return render_template('/pages/staff_ruangan/transaksi.html', data=aggregated_result, menu="transaksi_verifikasi", tglstart=tglstart, tglend=tglend, jenis_layanan=jenis_layanan,role=role, username=username)
 
 # Fungsi untuk mengambil data transaksi berdasarkan role pengguna
@@ -1377,23 +1377,80 @@ def transaksiStaffRuangan():
 
 @app.route("/staff_ruangan/transaksi/detail/<id>")
 def staffRuanganDetailTransaksi(id):
-    # Fetch the document based on the provided ID
-    document = mongo.db.kepala_bagian.find_one({"_id": ObjectId(id)})
+    from bson import ObjectId, errors
+    from flask import render_template
+
+    # Verifikasi ID
+    try:
+        document_id = ObjectId(id)
+    except errors.InvalidId:
+        return "Invalid ID format", 400
+
+    # Koleksi
+    staff_gudang_collection = db2['staff_gudang']
+    sub_bag_collection= db2['sub_bag']
+    kepala_bagian_collection = db2['kepala_bagian']
     
-    if not document:
-        return "Document not found", 404
-    
-    # Fetch other documents that match the same id_sub_bag, tanggal_pengusulan, tanggal_penerimaan, and ruangan
-    filter_criteria = {
-        "id_sub_bag": document.get("id_sub_bag"),
-        "tanggal_pengusulan": document.get("tanggal_pengusulan"),
+
+    # Cari dokumen dsub_bag_collectioni staff_gudang
+    document = staff_gudang_collection.find_one({"_id": document_id})
+
+    checkStaffGudangC = staff_gudang_collection.find_one({"_id": document_id})
+    checkSubBagC = sub_bag_collection.find_one({"_id": document_id})
+    checkKepalaBagianC = kepala_bagian_collection.find_one({"_id": document_id})
+
+
+    if checkStaffGudangC:
+        document = checkStaffGudangC
+    if checkSubBagC:
+        document = checkSubBagC
+    if checkKepalaBagianC:
+        document = checkKepalaBagianC
+
+
+    # Filter kriteria untuk dokumen terkait
+    filter_criteria = {}
+
+    related_documents = list(kepala_bagian_collection.find(filter_criteria))
+
+    if checkStaffGudangC:
+        print("A")
+        filter_criteria = {
+        "id_sub_bag": document.get("id_pengusulan_barang"),
+        # "tanggal_pengusulan": document.get("tanggal_pengusulan") if document.get("tanggal_pengusulan") else document.get("tanggal_pengajuan"),
+        "tanggal_penerimaan": document.get("tanggal_penerimaan"),
+        # "ruangan": document.get("ruangan"),'
+        }
+        related_documents = list(staff_gudang_collection.find(filter_criteria))
+    if checkSubBagC:
+        print("B")
+        filter_criteria = {
+        # "id_sub_bag": document.get("id_pengusulan_barang"),
+        "tanggal_pengusulan": document.get("tanggal_pengusulan") if document.get("tanggal_pengusulan") else document.get("tanggal_pengajuan"),
+        # "tanggal_penerimaan": document.get("tanggal_penerimaan"),
+        # "ruangan": document.get("ruangan"),
+        "status": "Success"
+        }
+        related_documents = list(sub_bag_collection.find(filter_criteria))
+    if checkKepalaBagianC:
+        print("C")
+        filter_criteria = {
+        # "id_sub_bag": document.get("id_pengusulan_barang"),
+        "tanggal_pengusulan": document.get("tanggal_pengusulan") if document.get("tanggal_pengusulan") else document.get("tanggal_pengajuan"),
         "tanggal_penerimaan": document.get("tanggal_penerimaan"),
         "ruangan": document.get("ruangan"),
-    }
+        }
+        related_documents = list(kepala_bagian_collection.find(filter_criteria))
+
+    if not document:
+        return "Document not found", 404
+
+    print("Filter criteria:", filter_criteria)
+
+    # Cari dokumen terkait
+
     
-    related_documents = list(mongo.db.kepala_bagian.find(filter_criteria))
-    
-    # Process related documents to prepare for the table
+    # Siapkan data untuk ditampilkan di template
     items = []
     for idx, doc in enumerate(related_documents, start=1):
         items.append({
@@ -1402,19 +1459,36 @@ def staffRuanganDetailTransaksi(id):
             "volume": doc.get("volume"),
             "merek": doc.get("merek"),
             "status": doc.get("status"),
-            "jumlah_diterima": doc.get("jumlah_diterima"),
+            "jumlah_diterima": doc.get("jumlah_diterima", 0),
         })
-    print(items)
+
+    # Debugging print
+    print("related_documents: ", related_documents)
+    print("Document:", document)
+    print("Items:", items)
+
     return render_template(
         '/pages/staff_ruangan/detail_transaksiRuangan.html',
         document=document,
         items=items
     )
 
+
+
+
+
 @app.route("/staff_ruangan/pengajuan")
 def pengajuanBarang():
     role = session['role']  # Ambil role pengguna dari session
+    user_collection = db['users']  # Koleksi yang menyimpan data pengguna
     username = session['username']
+    user_collection = db['users'] 
+    user_data_cursor = user_collection.find_one({"username": username})
+    if user_data_cursor:
+        name = user_data_cursor.get('name')
+        print(name)
+
+
     if request.method == "POST":
         if request.form.get("_method") == "DELETE":
             return delete_pengajuan_barang(request.form.get("id"))
@@ -1459,7 +1533,7 @@ def pengajuanBarang():
         menu="pengajuan-barang",
         pengajuan_barang=pengajuan_barang,
         role=role,
-        username=username,
+        username=name,
         barang=barang
     )
 
@@ -1474,6 +1548,14 @@ def sendPengajuanBarang():
         nama_barang = request.form.get("nama_barang")
         jumlah = request.form.get("jumlah")
         ruangan = request.form.get("ruangan")
+
+        # try:
+        #     jumlah = int(jumlah)  # Konversi jumlah menjadi integer
+        #     if jumlah <= 0:  # Memeriksa apakah jumlah kurang dari atau sama dengan 0
+        #         return jsonify({"error": "Jumlah harus lebih dari 0"}), 400
+        # except ValueError:
+        #     return jsonify({"error": "Jumlah harus berupa angka"}), 400
+    
 
         # Prepare data to be sent
         data = {
@@ -1529,7 +1611,12 @@ def pengusulanBarang():
     print(pengusulan_barang)
 
     username = session['username']
-    nama_ruangan_arr = username.split()
+    user_collection = db['users'] 
+    user_data_cursor = user_collection.find_one({"username": username})
+    if user_data_cursor:
+        name = user_data_cursor.get('name')
+        print(name)
+    nama_ruangan_arr = name.split()
     nama_ruangan = nama_ruangan_arr[1]
 
     return render_template(
